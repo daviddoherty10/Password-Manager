@@ -6,32 +6,27 @@ class NewUser:
         self.username = username
         self.password = password
 
-    def __str__(self, username, password):
-        print(f"{username}, {password}")
-    
-
     def make_username():
         while True:
-            username = input("Username: ").rstrip()
-            if not username:
-                print("Please input a valid username")
-            elif re.search(r"[a-zA-Z][0-9]\S", username):
-                print("Invalid username. Usernames must contain both letters and digits.")
+            username = input("Username: ").strip()
+            if len(username) < 4:
+                print("Invalid username: (char-count must be >= 4)")
             else:
+                username_exists = False
                 with open("user info.csv", mode="r") as file:
                     csv_reader = csv.DictReader(file)
                     for row in csv_reader:
                         if row["username"] == username:
                             print("Username already exists.")
+                            username_exists = True
                             break
 
-                        happy = input("Make this your username? (yes/no) ").lower().rstrip()
-                        if happy == "yes":
-                            return username
-                        else:
-                            continue  # Exit the loop and reprompt for a new username
-                    else:
-                        return username  # If the loop completes without finding a match, the username is available
+                if username_exists:
+                    continue
+
+                happy = input("Make this your username? (yes/no) ").lower().strip()
+                if happy == "yes":
+                    return username
 
 
     def make_password():
@@ -40,7 +35,8 @@ class NewUser:
             if not password:
                 print("Please enter a valid passowrd")
                 continue
-            elif re.search(r"\w\d|\d\w", password):
+            elif re.search(r"^[a-z0-9_]+$", password) and 8 <= len(password) <= 25:
+                print(end="\n \n")
                 return password
             else:
                 print("Invalid")
