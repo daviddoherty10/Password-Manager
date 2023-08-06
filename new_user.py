@@ -5,6 +5,9 @@ class User:
     def __init__(self, username, password):
         self.username = username
         self.password = password
+
+    def __str__(self, username, password):
+        print(f"{username}, {password}")
     
 
     def make_username():
@@ -42,8 +45,9 @@ class User:
             else:
                 print("Invalid")
                 continue
+    
 
-
-username = User.make_username() 
-password = User.make_password() 
-user = User(username, password)      
+    def add_pass_and_user_to_csv(username, password):       
+        with open("user info.csv", mode="a") as file:
+            writer = csv.DictWriter(file, fieldnames=["username", "password"])
+            writer.writerow({"username": username, "password": password})
